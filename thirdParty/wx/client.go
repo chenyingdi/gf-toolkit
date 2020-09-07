@@ -14,22 +14,23 @@ import (
 )
 
 type Client interface {
-	Code2Session(code string) (g.Map, utils.Error)                                // 微信小程序获取openid和session
-	Oauth2(code string) (g.Map, utils.Error)                                      // web端oauth2登录
-	UnifiedOrder(p *utils.RequestParams) (g.Map, utils.Error)                     // 微信支付统一下单
-	Refund(p *utils.RequestParams, keyPath, certPath string) (g.Map, utils.Error) // 微信支付退款
-	CloseOrder(p *utils.RequestParams) (g.Map, utils.Error)                       // 微信支付关闭订单
-	GetAccessToken() (g.Map, utils.Error)                                         // 获取access_token
-	GetDailyRetain(accessToken, date string) (g.Map, utils.Error)                 // 微信小程序获取日访问留存
-	GetWeeklyRetain(accessToken, begin, end string) (g.Map, utils.Error)          // 微信小程序获取周访问留存
-	GetMonthlyRetain(accessToken string, ym string) (g.Map, utils.Error)          // 微信小程序获取月访问留存
-	GetDailySummary(accessToken, date string) (g.Map, utils.Error)                // 微信小程序获取日统计
-	GetDailyVisitTrend(accessToken, date string) (g.Map, utils.Error)             // 微信小程序获取日趋势
-	GetWeeklyVisitTrend(accessToken, begin, end string) (g.Map, utils.Error)      // 微信小程序获取周趋势
-	GetMonthlyVisitTrend(accessToken string, ym string) (g.Map, utils.Error)      // 微信小程序获取月趋势
-	GetDailyUserPortrait(accessToken, date string) (g.Map, utils.Error)           // 微信小程序日用户画像
-	GetDailyVisitDistribution(accessToken, date string) (g.Map, utils.Error)      // 微信小程序日访问分布
-	GetDailyVisitPage(accessToken, date string) (g.Map, utils.Error)              // 微信小程序日页面数据
+	Code2Session(code string) (g.Map, utils.Error)                                       // 微信小程序获取openid和session
+	Oauth2(code string) (g.Map, utils.Error)                                             // web端oauth2登录
+	UnifiedOrder(p *utils.RequestParams) (g.Map, utils.Error)                            // 微信支付统一下单
+	Refund(p *utils.RequestParams, keyPath, certPath string) (g.Map, utils.Error)        // 微信支付退款
+	CloseOrder(p *utils.RequestParams) (g.Map, utils.Error)                              // 微信支付关闭订单
+	GetAccessToken() (g.Map, utils.Error)                                                // 获取access_token
+	GetDailyRetain(accessToken, date string) (g.Map, utils.Error)                        // 微信小程序获取日访问留存
+	GetWeeklyRetain(accessToken, begin, end string) (g.Map, utils.Error)                 // 微信小程序获取周访问留存
+	GetMonthlyRetain(accessToken string, ym string) (g.Map, utils.Error)                 // 微信小程序获取月访问留存
+	GetDailySummary(accessToken, date string) (g.Map, utils.Error)                       // 微信小程序获取日统计
+	GetDailyVisitTrend(accessToken, date string) (g.Map, utils.Error)                    // 微信小程序获取日趋势
+	GetWeeklyVisitTrend(accessToken, begin, end string) (g.Map, utils.Error)             // 微信小程序获取周趋势
+	GetMonthlyVisitTrend(accessToken string, ym string) (g.Map, utils.Error)             // 微信小程序获取月趋势
+	GetDailyUserPortrait(accessToken, date string) (g.Map, utils.Error)                  // 微信小程序日用户画像
+	GetDailyVisitDistribution(accessToken, date string) (g.Map, utils.Error)             // 微信小程序日访问分布
+	GetDailyVisitPage(accessToken, date string) (g.Map, utils.Error)                     // 微信小程序日页面数据
+	PushMessage(openid, keyword, tempID, formID, page string, message g.Map) utils.Error // 消息推送
 }
 
 type client struct {
@@ -377,6 +378,35 @@ func (c *client) GetDailyVisitPage(accessToken, date string) (g.Map, utils.Error
 	e.Append(er.Errs()...)
 
 	return data, e
+}
+
+// 推送消息
+func (c *client) PushMessage(openid, keyword, tempID, formID, page string, message g.Map) utils.Error {
+	e := utils.NewErr()
+
+	access, er := c.GetAccessToken()
+	e.Append(er.Errs()...)
+
+	data := g.Map{
+		"touser": openid,
+		"weapp_template_msg": g.Map{
+			"template_id":      tempID,
+			"form_id":          formID,
+			"page":             page,
+			"data":             message,
+			"emphasis_keyword": keyword,
+		},
+	}
+
+	jData, err := gjson.Encode(data)
+	e.Append(err)
+
+	u := fmt.Sprintf(PushMessageUrl, access)
+
+	_, err = http.Post(u, "application/json", bytes.NewReader(jData))
+	e.Append(err)
+
+	return e
 }
 
 // 签名

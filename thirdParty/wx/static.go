@@ -4,6 +4,7 @@ const (
 	Code2SessionUrl              = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
 	Oauth2Url                    = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
 	UnifiedOrderUrl              = "https://api.mch.weixin.qq.com/pay/unifiedorder"
+	PushMessageUrl               = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=%s"
 	RefundUrl                    = "https://api.mch.weixin.qq.com/secapi/pay/refund"
 	CloseOrderUrl                = "https://api.mch.weixin.qq.com/pay/closeorder"
 	GetAccessTokenUrl            = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
