@@ -18,19 +18,19 @@ type repo struct {
 }
 
 type Query struct {
-	Where     g.Map
-	And       g.Map
-	Or        g.Map
-	LeftJoin  []g.Map
-	RightJoin []g.Map
-	InnerJoin []g.Map
-	Fields    string
-	FieldsEx  string
-	Group     string
-	Order     string
-	Having    string
-	Page      int
-	Limit     int
+	Where     g.Map   `json:"where"`
+	And       g.Map   `json:"and"`
+	Or        g.Map   `json:"or"`
+	LeftJoin  []g.Map `json:"left_join"`
+	RightJoin []g.Map `json:"right_join"`
+	InnerJoin []g.Map `json:"inner_join"`
+	Fields    string  `json:"fields"`
+	FieldsEx  string  `json:"fields_ex"`
+	Group     string  `json:"group"`
+	Order     string  `json:"order"`
+	Having    string  `json:"having"`
+	Page      int     `json:"page"`
+	Limit     int     `json:"limit"`
 }
 
 type Page struct {
