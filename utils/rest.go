@@ -9,7 +9,7 @@ import (
 
 func Find(req *ghttp.Request) {
 	rsp := NewResp(req)
-	q := &query{}
+	q := &Query{}
 
 	err := gconv.Struct(req.Get("query"), q)
 	if err != nil {
@@ -57,7 +57,7 @@ func New(req *ghttp.Request) {
 		return
 	}
 
-	res, err := rep.Find(query{Where: g.Map{
+	res, err := rep.Find(Query{Where: g.Map{
 		"id": id,
 	}})
 	if err != nil {
@@ -89,7 +89,7 @@ func Edit(req *ghttp.Request) {
 		return
 	}
 
-	res, err := rep.Find(query{
+	res, err := rep.Find(Query{
 		Where: where,
 	})
 	if err != nil {

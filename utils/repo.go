@@ -7,7 +7,7 @@ import (
 )
 
 type REPO interface {
-	Find(q query) (Page, error)
+	Find(q Query) (Page, error)
 	Insert(p g.Map) (int64, error)
 	Update(where g.Map, p g.Map) error
 	Delete(where g.Map) error
@@ -17,7 +17,7 @@ type repo struct {
 	table string
 }
 
-type query struct {
+type Query struct {
 	Where     g.Map
 	And       g.Map
 	Or        g.Map
@@ -44,7 +44,7 @@ func NewRepo(table string) REPO {
 	}
 }
 
-func (r *repo) Find(q query) (Page, error) {
+func (r *repo) Find(q Query) (Page, error) {
 	var (
 		err   error
 		count int
