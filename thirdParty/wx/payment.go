@@ -11,7 +11,7 @@ func Payment(fee int, orderSn, appID, mchID, apiKey, openid string) (g.Map, util
 
 	c := NewPaymentClient(appID, mchID, apiKey)
 
-	p := NewParams()
+	p := utils.NewRequestParams()
 
 	ip, err := utils.GetIp()
 	e.Append(err)

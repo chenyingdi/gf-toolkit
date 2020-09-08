@@ -384,8 +384,10 @@ func (c *client) GetDailyVisitPage(accessToken, date string) (g.Map, utils.Error
 func (c *client) PushMessage(openid, keyword, tempID, formID, page string, message g.Map) utils.Error {
 	e := utils.NewErr()
 
-	access, er := c.GetAccessToken()
+	res, er := c.GetAccessToken()
 	e.Append(er.Errs()...)
+
+	access := gconv.String(res["access_token"])
 
 	data := g.Map{
 		"touser": openid,
