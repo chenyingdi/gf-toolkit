@@ -4,15 +4,13 @@ import (
 	"bytes"
 	"context"
 	"github.com/chenyingdi/gf-toolkit/utils"
-	"github.com/google/uuid"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"net/http"
 	"net/url"
-	"strings"
 )
 
 // 上传对象
-func CosUpload(rawurl, secretID, secretKey, filePath string, f []byte) utils.Error {
+func CosUpload(rawurl, secretID, secretKey, filePath, fileName string, f []byte) utils.Error {
 	e := utils.NewErr()
 	u, _ := url.Parse(rawurl)
 
@@ -25,7 +23,7 @@ func CosUpload(rawurl, secretID, secretKey, filePath string, f []byte) utils.Err
 		},
 	})
 
-	name := filePath + "/" + strings.ReplaceAll(uuid.New().String(), "-", "")
+	name := filePath + "/" + fileName
 
 	r := bytes.NewReader(f)
 
