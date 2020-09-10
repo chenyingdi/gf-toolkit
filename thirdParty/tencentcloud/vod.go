@@ -99,7 +99,7 @@ func GetRefererUrl(rawurl, key string, rLimit, exper int) (string, utils.Error) 
 	sign := hex.EncodeToString(h.Sum(nil))
 
 	referer := fmt.Sprintf(
-		"%s?t=%s$exper=%d&rlimit=%d&us=%s&sign=%s",
+		"%s?t=%s&exper=%d&rlimit=%d&us=%s&sign=%s",
 		rawurl, t, exper, rLimit, us, sign,
 	)
 
